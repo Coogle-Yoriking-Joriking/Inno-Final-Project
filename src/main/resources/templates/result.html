@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coogle</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link href="/css/index.css" rel="stylesheet">
+    <script src="/js/index.js" type="text/javascript"></script>
+
+</head>
+<style>
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    row-gap: 40px;
+    column-gap: 30px;
+
+    max-width: 1700px;
+    margin: auto;
+    padding: 100px;
+}
+.card {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 15/17;
+    margin: auto;
+
+    border: 1px solid #dfe1e5;
+    border-radius: 13px;
+    box-shadow: 0 0 5px 0 #dfe1e5;
+
+    cursor: pointer;
+    overflow: hidden;
+}
+.card-img img {
+    width: 100%;
+    aspect-ratio: 15/13;
+    object-fit: cover;
+}
+.card-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    aspect-ratio: 30/7;
+
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+</style>
+<body>
+<div th:replace="/fragments/index.html :: navigationbarFragment"></div>
+<div style="height: 60px;"></div>
+<div th:replace="/fragments/index.html :: modalFragment"></div>
+<div class="search-bar">
+    <div>
+        <input type="text" id="input-tag" placeholder="재료를 입력하고 엔터를 눌러주세요">
+        <button class="search-button">🔍</button>
+    </div>
+    <ul class="d-list">
+    </ul>
+</div>
+<div class="main">
+    <div class="card-container">
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+        <div class="card">
+            <div class="card-img">
+                <img src="https://mediahub.seoul.go.kr/wp-content/uploads/2020/10/d13ea4a756099add8375e6c795b827ab.jpg">
+            </div>
+            <div class="card-title">음식 제목은 떡볶이</div>
+        </div>
+    </div>
+</div>
+<div>
+
+</div>
+
+</body>
+</html>

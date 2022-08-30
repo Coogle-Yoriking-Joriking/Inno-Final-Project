@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coogle</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link href="/css/index.css" rel="stylesheet">
+    <script src="/js/index.js" type="text/javascript"></script>
+
+</head>
+<style>
+#logo-position {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    height: 30vh;
+}
+</style>
+<body>
+<div th:replace="/fragments/index.html :: navigationbarFragment"></div>
+<div style="height: 60px;"></div>
+<div th:replace="/fragments/index.html :: modalFragment"></div>
+<div id="logo-position">
+    <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
+</div>
+<div class="search-bar">
+    <div>
+        <input type="text" id="input-tag" placeholder="재료를 입력하고 엔터를 눌러주세요">
+        <button class="search-button">🔍</button>
+    </div>
+    <ul class="d-list">
+    </ul>
+</div>
+</body>
+</html>

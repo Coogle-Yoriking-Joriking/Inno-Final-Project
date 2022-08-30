@@ -1,0 +1,45 @@
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+
+<!-- 상단바 -->
+<nav class="navigation-bar" th:fragment="navigationbarFragment">
+    <button class="color-border-button" id="login-button" onclick='$("#login").addClass("on")'>로그인</button>
+</nav>
+
+<div th:fragment="modalFragment">
+    <!-- 로그인 모달창 -->
+    <div class="modal" id="login">
+        <div class="modal-background" onclick='$(this).parent().removeClass("on")'></div>
+        <div class="modal-card">
+            <h2>로그인</h2>
+            <div class="id-password">
+                <textarea maxlength="20" placeholder="아이디" name="id"
+                          onKeyPress="javascript: if (event.keyCode==13) return false;"></textarea>
+                <textarea placeholder="비밀번호" name="password"></textarea>
+            </div>
+            <div class="button-position">
+                <button class="color-button" onclick='login()'>로그인</button>
+                <button class="white-button" onclick='$("#signup").addClass("on");
+                                                $("#login").removeClass("on")'>회원가입</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 회원가입 모달창 -->
+    <div class="modal" id="signup">
+        <div class="modal-background" onclick='$(this).parent().removeClass("on")'></div>
+        <div class="modal-card">
+            <h2>회원가입</h2>
+            <div class="id-password">
+                <textarea maxlength="10" placeholder="아이디" name="id"
+                          onKeyPress="javascript: if (event.keyCode==13) return false;"></textarea>
+                <button id="double-check" class="color-border-button">중복확인</button>
+                <textarea placeholder="닉네임" name="nickname"></textarea>
+                <textarea placeholder="비밀번호" name="password"></textarea>
+            </div>
+            <div class="button-position">
+                <button class="color-button" onclick='signup()'>회원가입</button>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
