@@ -11,7 +11,10 @@ import com.inno.coogle.repository.MemberRepository;
 import com.inno.coogle.security.UserDetailsImpl;
 import com.inno.coogle.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,4 +45,12 @@ public class PostController {
     public List<PostResponseDto> getAllPosts() {
         return postService.getAllPosts();
     }
+
+    @GetMapping("/search1")
+    public List<PostResponseDto> search1(@RequestParam(name = "query") String keyword) {
+        return postService.search(keyword);
+    }
+
+
+
 }
