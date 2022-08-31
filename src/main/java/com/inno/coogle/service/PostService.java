@@ -3,6 +3,7 @@ package com.inno.coogle.service;
 import com.inno.coogle.domain.Image;
 import com.inno.coogle.domain.Member;
 import com.inno.coogle.domain.Post;
+import com.inno.coogle.dto.post.PostDetailResponseDto;
 import com.inno.coogle.dto.post.PostRequestDto;
 import com.inno.coogle.dto.post.PostResponseDto;
 import com.inno.coogle.global.error.exception.ErrorCode;
@@ -28,12 +29,17 @@ public class PostService {
     // 게시글 작성
     @Transactional
     public void createPost(PostRequestDto postRequestDto, Member member, List<MultipartFile> imageFileList) {
-        List<String> imageUrlList = amazonS3Service.uploadFile(imageFileList, "posts/");
-        Post post = new Post(member, postRequestDto);
-        postRepository.save(post);
-        List<Image> collect = imageUrlList.stream().map(image -> new Image(image, post)).collect(Collectors.toList());
-        imageRepository.saveAll(collect);
-        post.setThumbnailUrl(collect.get(0).getImageUrl());
+        if (imageFileList != null) {
+            Post post = new Post(member, postRequestDto);
+            List<String> imageUrlList = amazonS3Service.uploadFile(imageFileList, "posts/");
+            postRepository.save(post);
+            List<Image> collect = imageUrlList.stream().map(image -> new Image(image, post)).collect(Collectors.toList());
+            imageRepository.saveAll(collect);
+            post.setThumbnailUrl(collect.get(0).getImageUrl());
+        } else {
+            throw new InvalidValueException(ErrorCode.INVALID_INPUT_FILEPATH);
+        }
+
     }
 
     // 전체 게시글 리스트 조회
@@ -49,7 +55,15 @@ public class PostService {
         return postResponseDtoList;
     }
 
-
+    // 상세 게시글 조회
+    @Transactional
+    public PostDetailResponseDto getOnePost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new InvalidValueException(ErrorCode.NOTFOUND_POST));
+        return PostDetailResponseDto.builder()
+                .post(post)
+                .build();
+    }
 
 
     // 게시글 수정
@@ -60,11 +74,15 @@ public class PostService {
         if (!member.getMemberId().equals(post.getMember().getMemberId())) {
             throw new InvalidValueException(ErrorCode.NOT_AUTHORIZED);
         }
-
-        List<String> imageUrlList = amazonS3Service.uploadFile(imageFileList, "posts/");
-        post.update(postRequestDto);
-        List<Image> collect = imageUrlList.stream().map(image -> new Image(image, post)).collect(Collectors.toList());
-        imageRepository.saveAll(collect);
+        if (imageFileList != null) {
+            List<String> imageUrlList = amazonS3Service.uploadFile(imageFileList, "posts/");
+            post.update(postRequestDto);
+            List<Image> collect = imageUrlList.stream().map(image -> new Image(image, post)).collect(Collectors.toList());
+            imageRepository.saveAll(collect);
+            post.setThumbnailUrl(collect.get(0).getImageUrl());
+        } else {
+            throw new InvalidValueException(ErrorCode.INVALID_INPUT_FILEPATH);
+        }
     }
 
     // 게시글 삭제
@@ -76,7 +94,5 @@ public class PostService {
         }
         postRepository.deleteById(postId);
     }
-
-
 
 }
