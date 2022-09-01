@@ -17,15 +17,17 @@ public class PostDetailResponseDto {
     private String imageUrl;
     private String ingredientsList;
     private String tagList;
-    private Long level;
+    private int level;
     private String foodType;
+    private int heartNum;
+    private Boolean heartState;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedAt;
 
     @Builder
-    public PostDetailResponseDto(Post post) {
+    public PostDetailResponseDto(Post post, int heartNum, Boolean heartState) {
         this.postId = post.getId();
         this.nickname = post.getMember().getNickname();
         this.postTitle = post.getTitle();
@@ -37,5 +39,7 @@ public class PostDetailResponseDto {
         this.foodType = post.getFoodType();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
+        this.heartNum = heartNum;
+        this.heartState =heartState;
     }
 }

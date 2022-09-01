@@ -10,7 +10,7 @@ public class PostRequestDto {
     private String postContents;
     private List<String> ingredientsList;
     private List<String> tagList;
-    private Long level;
+    private int level;
     private String foodType;
 
 }

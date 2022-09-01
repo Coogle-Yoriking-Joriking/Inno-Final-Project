@@ -25,6 +25,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
     private final AmazonS3Service amazonS3Service;
+    private final HeartService heartService;
 
     // 게시글 작성
     @Transactional
@@ -57,11 +58,13 @@ public class PostService {
 
     // 상세 게시글 조회
     @Transactional
-    public PostDetailResponseDto getOnePost(Long postId) {
+    public PostDetailResponseDto getOnePost(Long postId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new InvalidValueException(ErrorCode.NOTFOUND_POST));
         return PostDetailResponseDto.builder()
                 .post(post)
+                .heartNum(post.getHeartNum())
+                .heartState(heartService.heartState(post, member))
                 .build();
     }
 

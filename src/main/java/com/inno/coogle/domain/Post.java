@@ -1,5 +1,6 @@
 package com.inno.coogle.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.inno.coogle.converter.StringListConverter;
 import com.inno.coogle.dto.post.PostRequestDto;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -18,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Post extends Timestamped{
     @Id
+    @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -31,13 +34,14 @@ public class Post extends Timestamped{
     @NotBlank
     private String contents;
 
-//    @Convert(converter = StringListConverter.class)
+    @NotBlank
     private String ingredientsList;
 
-//    @Convert(converter = StringListConverter.class)
+    @NotBlank
     private String tagList;
+
     @NotNull
-    private Long level;
+    private int level;
 
     @NotBlank
     private String foodType;
@@ -47,6 +51,12 @@ public class Post extends Timestamped{
 
     private String thumbnailUrl;
 
+    private int heartNum;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Heart> hearts = new LinkedList<>();
+
     public Post(Member member, PostRequestDto postRequestDto) {
         this.member = member;
         this.title = postRequestDto.getPostTitle();
@@ -55,6 +65,7 @@ public class Post extends Timestamped{
         this.tagList = postRequestDto.getTagList().toString();
         this.level = postRequestDto.getLevel();
         this.foodType = postRequestDto.getFoodType();
+        this.heartNum = 0;
     }
 
     public void update(PostRequestDto postRequestDto) {
@@ -64,6 +75,18 @@ public class Post extends Timestamped{
         this.tagList = postRequestDto.getTagList().toString();
         this.level = postRequestDto.getLevel();
         this.foodType = postRequestDto.getFoodType();
+    }
+
+    public void addHearts(Heart heart) {
+        hearts.add(heart);
+    }
+
+    public void like() {
+        this.heartNum += 1;
+    }
+
+    public void dislike() {
+        this.heartNum -= 1;
     }
 
 }
