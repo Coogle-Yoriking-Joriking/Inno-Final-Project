@@ -3,6 +3,7 @@ package com.inno.coogle.service;
 import com.inno.coogle.domain.Image;
 import com.inno.coogle.domain.Member;
 import com.inno.coogle.domain.Post;
+import com.inno.coogle.dto.post.PostDetailResponseDto;
 import com.inno.coogle.dto.post.PostRequestDto;
 import com.inno.coogle.dto.post.PostResponseDto;
 import com.inno.coogle.global.error.exception.ErrorCode;
@@ -97,7 +98,10 @@ public class PostService {
 
     @Transactional
     public List<PostResponseDto> search(String keyword){
-        List<Post> posts = postRepository.findByIngredientsListContainingIgnoreCase(keyword);
+        List<String> arr = List.of(keyword.split(","));
+        String a ;
+        a = arr.stream().map(String::valueOf).collect(Collectors.joining("%,%", "%", "%"));
+        List<Post> posts = postRepository.findByIngredientsListContainingIgnoreCase(a);
         List<PostResponseDto> postResponseDtoList = new ArrayList<>();
         for (Post post : posts) {
             postResponseDtoList.add(PostResponseDto.builder()

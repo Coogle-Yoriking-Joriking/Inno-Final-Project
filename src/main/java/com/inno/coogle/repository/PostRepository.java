@@ -10,6 +10,6 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByOrderByModifiedAtDesc();
 
-    @Query(value = "FROM Post  WHERE UPPER(ingredientsList)  LIKE CONCAT ('%', UPPER(?1) ,'%') ")
+    @Query(value = "FROM Post  WHERE UPPER(ingredientsList)  LIKE CONCAT (UPPER(?1) ,'%') ")
     List<Post> findByIngredientsListContainingIgnoreCase(String keyword);
 }

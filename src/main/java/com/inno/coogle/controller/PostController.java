@@ -82,8 +82,8 @@ public class PostController {
     }
 
     @GetMapping("/search1")
-    public List<PostResponseDto> search1(@RequestParam(name = "query") String keyword) {
-        return postService.search(keyword);
+    public List<PostResponseDto> search1(@RequestParam("query") String query) {
+        return postService.search(query);
     }
 
 
