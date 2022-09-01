@@ -31,11 +31,11 @@ public class Post extends Timestamped{
     @NotBlank
     private String contents;
 
-    @Convert(converter = StringListConverter.class)
-    private List<String> ingredientsList;
+//    @Convert(converter = StringListConverter.class)
+    private String ingredientsList;
 
-    @Convert(converter = StringListConverter.class)
-    private List<String> tagList;
+//    @Convert(converter = StringListConverter.class)
+    private String tagList;
     @NotNull
     private Long level;
 
@@ -51,8 +51,8 @@ public class Post extends Timestamped{
         this.member = member;
         this.title = postRequestDto.getPostTitle();
         this.contents = postRequestDto.getPostContents();
-        this.ingredientsList = postRequestDto.getIngredientsList();
-        this.tagList = postRequestDto.getTagList();
+        this.ingredientsList = postRequestDto.getIngredientsList().toString();
+        this.tagList = postRequestDto.getTagList().toString();
         this.level = postRequestDto.getLevel();
         this.foodType = postRequestDto.getFoodType();
     }
@@ -60,8 +60,8 @@ public class Post extends Timestamped{
     public void update(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getPostTitle();
         this.contents = postRequestDto.getPostContents();
-        this.ingredientsList = postRequestDto.getIngredientsList();
-        this.tagList = postRequestDto.getTagList();
+        this.ingredientsList = postRequestDto.getIngredientsList().toString();
+        this.tagList = postRequestDto.getTagList().toString();
         this.level = postRequestDto.getLevel();
         this.foodType = postRequestDto.getFoodType();
     }

@@ -95,4 +95,22 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
+
+    @Transactional
+    public List<PostResponseDto> search(String keyword){
+        List<String> arr = List.of(keyword.split(","));
+        String a ;
+        a = arr.stream().map(String::valueOf).collect(Collectors.joining("%,%", "%", "%"));
+        List<Post> posts = postRepository.findByIngredientsListContainingIgnoreCase(a);
+        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+        for (Post post : posts) {
+            postResponseDtoList.add(PostResponseDto.builder()
+                    .post(post)
+                    .build());
+        }
+        return postResponseDtoList;
+
+    }
+
+
 }
