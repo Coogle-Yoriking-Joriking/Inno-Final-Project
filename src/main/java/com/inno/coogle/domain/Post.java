@@ -22,7 +22,7 @@ public class Post extends Timestamped{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memeber_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @NotBlank
@@ -32,10 +32,10 @@ public class Post extends Timestamped{
     private String contents;
 
     @Convert(converter = StringListConverter.class)
-    private List<String> ingredientsList = new ArrayList<>();
+    private List<String> ingredientsList;
 
     @Convert(converter = StringListConverter.class)
-    private List<String> tagList = new ArrayList<String>();
+    private List<String> tagList;
     @NotNull
     private Long level;
 
