@@ -51,8 +51,12 @@ public class PostController {
 
     // 게시글 상세 조회
     @GetMapping("/{postId}")
-    public CommonResponse<?> getOnePost(@PathVariable Long postId) {
-        return ApiUtils.success(200, postService.getOnePost(postId));
+    public CommonResponse<?> getOnePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            throw new InvalidValueException(ErrorCode.HANDLE_ACCESS_DENIED);
+        }
+        Member member = memberRepository.findMemberByUsername(userDetails.getUsername());
+        return ApiUtils.success(200, postService.getOnePost(postId, member));
     }
 
     // 게시글 수정
