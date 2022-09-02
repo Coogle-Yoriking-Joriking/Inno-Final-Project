@@ -6,6 +6,7 @@ import com.inno.coogle.domain.Post;
 import com.inno.coogle.dto.post.PostDetailResponseDto;
 import com.inno.coogle.dto.post.PostRequestDto;
 import com.inno.coogle.dto.post.PostResponseDto;
+import com.inno.coogle.global.error.exception.EntityNotFoundException;
 import com.inno.coogle.global.error.exception.ErrorCode;
 import com.inno.coogle.global.error.exception.InvalidValueException;
 import com.inno.coogle.repository.ImageRepository;
@@ -60,7 +61,7 @@ public class PostService {
     @Transactional
     public PostDetailResponseDto getOnePost(Long postId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new InvalidValueException(ErrorCode.NOTFOUND_POST));
+                () -> new EntityNotFoundException(ErrorCode.NOTFOUND_POST));
         return PostDetailResponseDto.builder()
                 .post(post)
                 .heartNum(post.getHeartNum())
@@ -73,7 +74,7 @@ public class PostService {
     @Transactional
     public void updatePost(Long postId, PostRequestDto postRequestDto, Member member, List<MultipartFile> imageFileList) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new InvalidValueException(ErrorCode.NOTFOUND_POST));
+                () -> new EntityNotFoundException(ErrorCode.NOTFOUND_POST));
         if (!member.getMemberId().equals(post.getMember().getMemberId())) {
             throw new InvalidValueException(ErrorCode.NOT_AUTHORIZED);
         }
@@ -91,7 +92,7 @@ public class PostService {
     // 게시글 삭제
     public void deletePost(Long postId, Member member) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new InvalidValueException(ErrorCode.NOTFOUND_POST));
+                () -> new EntityNotFoundException(ErrorCode.NOTFOUND_POST));
         if (!member.getMemberId().equals(post.getMember().getMemberId())) {
             throw new InvalidValueException(ErrorCode.NOT_AUTHORIZED);
         }

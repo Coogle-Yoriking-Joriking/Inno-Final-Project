@@ -4,6 +4,7 @@ import com.inno.coogle.domain.Heart;
 import com.inno.coogle.domain.Member;
 import com.inno.coogle.domain.Post;
 import com.inno.coogle.dto.heart.HeartResponseDto;
+import com.inno.coogle.global.error.exception.EntityNotFoundException;
 import com.inno.coogle.global.error.exception.ErrorCode;
 import com.inno.coogle.global.error.exception.InvalidValueException;
 import com.inno.coogle.repository.HeartRepository;
@@ -26,7 +27,7 @@ public class HeartService {
     @Transactional
     public HeartResponseDto hearts(String username, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new InvalidValueException(ErrorCode.NOTFOUND_POST));
+                () -> new EntityNotFoundException(ErrorCode.NOTFOUND_POST));
         Member member = memberRepository.findMemberByUsername(username);
 
         Boolean heartState;
