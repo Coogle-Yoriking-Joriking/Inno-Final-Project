@@ -15,8 +15,8 @@ public class PostDetailResponseDto {
     private String postTitle;
     private String postContents;
     private String imageUrl;
-    private List<String> ingredientsList;
-    private List<String> tagList;
+    private String ingredientsList;
+    private String tagList;
     private Long level;
     private String foodType;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
