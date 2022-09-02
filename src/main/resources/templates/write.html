@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>블록 옮기기</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<style>
+body {
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+}
+::selection {
+	background-color: #00000010;
+}
+
+#menu {
+	position: absolute;
+	display: none;
+	justify-content: center;
+	flex-direction: row;
+	cursor: pointer;
+	z-index: 10;
+
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	background-clip: content-box;
+	background-color: #f4f4f4;
+
+	font-size: 0.9rem;
+	color: #cdcdcd;
+}
+#menu-toggle {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	top: +30px;
+	left: -20px;
+
+	width: 100px;
+	height: 150px;
+
+	background-color: white;
+	border: 1px solid #cdcdcd;
+	border-radius: 5px;
+}
+#menu-delete {
+	width: 100%;
+	height: 20%;
+	padding-top: 5px;
+	text-align: center;
+	color: #c83c0b;
+	border-bottom: 1px solid #cdcdcd;
+}
+#menu-text, #menu-image {
+	width: 100%;
+	height: 40%;
+	padding-top: 20px;
+	text-align: center;
+	color: black;
+}
+#menu-toggle div:hover {
+	background-color: #f4f4f470;
+}
+#menu-image {
+	border-top: 1px solid #cdcdcd;
+}
+
+ul {
+	width: 800px;
+	height: 600px;
+
+	margin: 10px;
+	padding: 10px;
+
+	background-color: white;
+	border-radius: 10px;
+}
+
+li:empty::before {
+	content: attr(placeholder);
+	color: #cdcdcd;
+	display: block;
+}
+
+/* Chrome, Firefox, Opera, Safari 10.1+ */
+li:focus, li:hover {
+	outline: none;
+	background-color: #f4f4f4;
+}
+
+li {
+	list-style: none;
+	padding: 10px;
+
+	width: 780px;
+
+	border-radius: 10px;
+
+	color: black;
+	user-select: none;
+	display: inline-block;
+}
+
+li.start {
+	height: 0;
+	border-radius: 0;
+	padding: 0;
+	margin: 0;
+}
+
+.hover {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	opacity: 0.9;
+}
+
+.temp {
+	background-color: #f4f4f4f4;
+	opacity: 0.5;
+}
+</style>
+
+<body>
+	<ul class="first">
+		<li class="start"></li>
+		<li>누른 상태로 위치 이동</li>
+		<li>더블클릭 텍스트 편집</li>
+	</ul>
+	<div class="hover"></div>
+</body>
+<script>
+	const body = document.querySelector("body");
+	const hover = document.querySelector(".hover");
+	var long_click_timer;
+
+	function isBefore(element1, element2) {
+		if (element2.parentNode === element1.parentNode) {
+			for (let cur = element1.previousSibling; cur; cur = cur.previousSibling) {
+				if (cur === element2) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	let clicked = false;
+	let hoverLi = undefined;
+	let targetLi = undefined;
+
+	function mousemove(event) {
+		if (!clicked || !hoverLi) return;
+		$("li").blur();
+
+		// pageX, pageY 는 모든 페이지 기반
+		// clientX, clientY 는 현제 보이는 화면 기반
+		const { pageX, pageY } = event;
+
+		// 잠시 현재 hover element를 가리고 현재 좌표의 element를 가져온다
+		hover.hidden = true;
+		const elemBelow = document.elementFromPoint(pageX, pageY);
+		const li = elemBelow.closest("li");
+		const ul = elemBelow.closest("ul");
+		hover.hidden = false;
+
+		hover.style.left = pageX - hover.offsetWidth / 4 + "px";
+		hover.style.top = pageY - hover.offsetHeight / 2 + "px";
+
+		if (!li) {
+			if (ul) {
+				const start = ul.querySelector(".start");
+				const { top } = start.getBoundingClientRect();
+				if (top > pageY) {
+					start.parentNode.insertBefore(targetLi, start.nextSibling);
+				} else {
+					ul.appendChild(targetLi);
+				}
+			}
+
+			return;
+		}
+
+		if (isBefore(targetLi, li) && li.className !== "start") {
+			li.parentNode.insertBefore(targetLi, li);
+		} else if (li.parentNode) {
+			li.parentNode.insertBefore(targetLi, li.nextSibling);
+		}
+	}
+
+	// 더블클릭 텍스트 편집
+	$(document).on("dblclick", "li", function(e) {
+		$(this).attr("contenteditable", true).focus();
+	}).on("blur", "li", function() {
+		$(this).removeAttr("contenteditable")
+	})
+
+	// 홀드 위치 이동
+	$(document).on("mousedown", "li", function(event) {
+		if (event.button !== 0 || $(this).attr("contenteditable")) {
+			return;
+		}
+		long_click_timer = setTimeout(function() {
+			clicked = true;
+			targetRemove = event.target.closest("li");
+			if (targetRemove === null || targetRemove.className === "start") {
+				return;
+			}
+	
+			targetLi = targetRemove;
+			hoverLi = targetRemove.cloneNode(true);
+			targetLi.classList.add("temp");
+	
+			const { pageX, pageY } = event;
+	
+			hover.appendChild(hoverLi);
+	
+			hover.style.left = pageX - hover.offsetWidth / 4 + "px";
+			hover.style.top = pageY - hover.offsetHeight / 2 + "px";
+		}, 100)
+	})
+	function mouseup() {
+		clearTimeout(long_click_timer)
+		if (!clicked) {
+			return;
+		}
+
+		clicked = false;
+		if (targetLi) {
+			targetLi.classList.remove("temp");
+		}
+		if (hoverLi) {
+			hoverLi.remove();
+		}
+		hoverLi = undefined;
+		targetLi = undefined;
+	}
+	function mouseleave() {
+		if (!clicked) {
+			return;
+		}
+		mouseup();
+	}
+
+	body.addEventListener("mousemove", mousemove);
+	body.addEventListener("mouseup", mouseup);
+	body.addEventListener("mouseleave", mouseleave);
+</script>
+<script>
+
+	// 드래그앤드롭/복붙 필터링작업
+	$(document).on('dragover drop', "li", function(event) {
+    	event.preventDefault();
+    	return false;
+	}).on('paste', "li", function(e) {
+		var self = $(this)[0]
+		var paste = (event.clipboardData || window.clipboardData);
+		var getText = paste.getData("text");
+		var range = document.getSelection().getRangeAt(0);
+		var start = range.startOffset; // 텍스트 선택 시작 위치
+		var end = range.endOffset; // 텍스트 선택 마지막 위치
+
+		var text = self.textContent;
+		var before = text.slice(0, start);
+		var after = text.slice(end);
+		setTimeout(function () {
+			self.textContent = before + getText + after;
+		}, 10)
+
+	// 텍스트/이미지 추가버튼
+	}).on("mouseover", "li", function() {
+		$(this).siblings("#menu").remove();
+		$(this).after($('<div id="menu">▼</div>'))
+		const menu = document.getElementById("menu");
+		menu.style.display = "flex";
+		menu.style.left = $(this)[0].offsetLeft - 30 + "px";
+		menu.style.top = $(this)[0].offsetTop + 10 + "px";
+	}).on("mouseleave", "li", function() {
+		var menu = $(this).siblings("#menu");
+		menu.fadeOut(700);
+		var timeoutID = setTimeout(function() {
+			menu.remove();
+		}, 1000)
+		$(menu).mouseenter(function() {
+			clearTimeout(timeoutID)
+			menu.stop().animate({opacity:'100'});
+			return;
+		})
+
+	})
+
+	$(document).on("mousedown", "#menu", function() {
+		$(this).append('<div id="menu-toggle"><div id="menu-delete">삭제</div><div id="menu-text">텍스트</div><div id="menu-image">이미지</div></div>')
+	}).on("mousedown", "#menu-toggle", function(e) {
+		if(e.target.textContent == "텍스트") {
+			$("#menu").after($('<li placeholder="텍스트를 입력하세요"></li>'))
+		}else if(e.target.textContent == "이미지") {
+			console.log("이미지어떡하지")
+		}
+	})
+</script>
+</html>
