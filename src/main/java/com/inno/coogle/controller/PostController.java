@@ -85,11 +85,18 @@ public class PostController {
         return ApiUtils.success(200, "게시글이 삭제되었습니다.");
     }
 
-    @GetMapping("/search1")
-    public List<PostResponseDto> search1(@RequestParam("query") String query) {
+    @GetMapping("/search")
+    public List<PostResponseDto> search(@RequestParam("query") String query) {
         return postService.search(query);
     }
 
+    @GetMapping("/filtersearch")
+    public List<PostResponseDto> filtersearch(@RequestParam("excepts") String excepts, @RequestParam("query") String query) {
+        if(excepts.length()< 1){
+            excepts = "NULL";
+        }
+        return postService.filtersearch(excepts,query);
+    }
 
 
 }

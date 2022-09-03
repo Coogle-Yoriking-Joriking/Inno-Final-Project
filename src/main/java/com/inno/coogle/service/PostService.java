@@ -115,6 +115,22 @@ public class PostService {
         return postResponseDtoList;
 
     }
+    @Transactional
+    public List<PostResponseDto> filtersearch(String keyword ,String keyword2){
+        List<String> arr = List.of(keyword.split(","));
+        String a = arr.stream().map(String::valueOf).collect(Collectors.joining("%,%", "%", "%"));
+        List<String> brr = List.of(keyword2.split(","));
+        String b ;
+        b = brr.stream().map(String::valueOf).collect(Collectors.joining("%,%", "%", "%"));
+        List<Post> posts = postRepository.filterSearch(a,b);
+        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+        for (Post post : posts) {
+            postResponseDtoList.add(PostResponseDto.builder()
+                    .post(post)
+                    .build());
+        }
+        return postResponseDtoList;
+    }
 
 
 }
